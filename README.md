@@ -48,7 +48,7 @@ cd backend
 pip install -r requirements.txt
 ```
 
-Crear un archivo `.env` dentro de `/backend`:
+Crear un archivo `.env`:
 
 ```env
 SECRET_KEY=tu_secret_key_aqui
