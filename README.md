@@ -1,4 +1,4 @@
-# 🤖 UniBot — Ecosistema Académico 360°
+# 🤖 UniBot — Ecosistema Académico
 
 Trabajo Práctico Final — Materia: Programación  
 Universidad Nacional de Rafaela (UNRAF)  
