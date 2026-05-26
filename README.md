@@ -2,7 +2,7 @@
 
 Trabajo Práctico Final — Materia: Programación  
 Universidad Nacional de Rafaela (UNRAF)  
-**Autores:** Santiago Bortolan & Julián Jacob
+**Autores:** Santiago Bortolan y Julián Jacob
 
 ---
 
@@ -86,25 +86,6 @@ docker compose exec backend python manage.py createsuperuser
 
 - Frontend: [http://localhost](http://localhost)
 - Admin Django: [http://localhost/api/admin](http://localhost/api/admin)
-
----
-
-## 📂 Estructura del proyecto
-
-UniBot/
-├── backend/          # API Django (modelos, vistas, IA, autenticación)
-│   ├── core/
-│   │   ├── ai/       # Agente, cliente Groq, prompts, tools
-│   │   └── ...
-│   └── unibot/       # Configuración principal Django
-├── frontend/         # React + Vite
-│   └── src/
-│       ├── pages/    # Dashboard, Chat, Materias, BrainDrain, etc.
-│       └── ...
-├── nginx/            # Configuración del proxy inverso
-├── docker-compose.yml
-└── .env              # Variables de entorno
-
 
 ## ✨ Funcionalidades principales
 
