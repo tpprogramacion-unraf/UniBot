@@ -18,7 +18,7 @@ UniBot es una plataforma web académica integral desarrollada para estudiantes u
 |---|---|
 | Frontend | React + Vite |
 | Backend | Django + Django REST Framework |
-| Base de datos | PostgreSQL |
+| Base de datos | SQLite |
 | Tareas async | Celery + Redis |
 | IA | Groq API (llama-3.3-70b-versatile) |
 | Proxy | Nginx |
