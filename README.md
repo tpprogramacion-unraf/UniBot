@@ -89,3 +89,6 @@ Incluye todos los servicios: backend, frontend, PostgreSQL, Redis y Celery.
 - **Flashcards** — generadas por IA con repetición espaciada
 - **Simulador de exámenes** — preguntas generadas automáticamente
 - **UniBot Chat** — agente conversacional con contexto académico
+- **Resumidor de PDF** — crea resumenes de varios pdf's
+- **Colab Mode** — crea grupo de amigos y comparte tus resumenes y flashcards
+  
