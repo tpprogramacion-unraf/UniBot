@@ -42,7 +42,7 @@ services:
       sh -c "python manage.py makemigrations core &&
              python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             gunicorn unibot.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60"
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60"
 
   celery:
     build: ./backend
@@ -57,7 +57,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: celery -A unibot worker --loglevel=info --concurrency=2
+    command: celery -A config worker --loglevel=info --concurrency=2
 
   frontend:
     build: ./frontend
