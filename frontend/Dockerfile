@@ -12,12 +12,9 @@ RUN npm ci --prefer-offline --no-audit
 # Copy source code
 COPY . .
 
-# Build arg for API URL (set by deploy system)
-ARG VITE_API_URL=https://api.app10.academia.ar/api
-ENV VITE_API_URL=$VITE_API_URL
-
-# Build for production
-RUN npm run build
+# API URL config for production
+ENV VITE_API_URL=https://api.app10.academia.ar/api
+ENV VITE_BACKEND_URL=https://api.app10.academia.ar
 
 EXPOSE 5173
 
