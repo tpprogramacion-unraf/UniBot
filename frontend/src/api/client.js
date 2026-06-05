@@ -1,7 +1,14 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  if (window.location.hostname === 'app10.academia.ar')
+    return 'https://api.app10.academia.ar/api';
+  return '/api'; // local dev (Vite proxy)
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseURL(),
   // ❌ NO pongas headers globales de Content-Type aquí
 });
 
