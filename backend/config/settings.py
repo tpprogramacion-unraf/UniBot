@@ -8,7 +8,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'unibot-dev-key')
 DEBUG = os.getenv('DEBUG', '0') == '1'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,api.app10.academia.ar,app10.academia.ar').split(',')
+_env_hosts = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = list(set(_env_hosts + ['api.app10.academia.ar', 'app10.academia.ar', 'localhost', '127.0.0.1']))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
