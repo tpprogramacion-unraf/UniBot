@@ -16,7 +16,7 @@ from .serializers import (
     ScheduleSlotSerializer, AcademicEventSerializer,
     UploadedDocumentSerializer, FlashcardSerializer,
     FlashcardReviewSerializer, StudyPlanSerializer,
-    StudyPlanItemSerializer, AgentSessionSerializer,
+    StudyPlanItemSerializer, AgentSessionSerializer, AgentSessionLightSerializer,
     ExamSimulationSerializer
 )
 from .ai.agent import UniBotAgent
@@ -174,18 +174,37 @@ class AgentChatViewSet(viewsets.GenericViewSet):
         message = request.data.get('message')
         session_id = request.data.get('session_id')
         session = None
+        is_new_session = False
         if session_id:
             try:
                 session = AgentSession.objects.get(id=session_id, user=request.user)
             except AgentSession.DoesNotExist:
                 pass
+        
+        if not session:
+            is_new_session = True
+            
         agent = UniBotAgent(user=request.user, session=session)
+        
+        if is_new_session and message and not agent.session.title:
+            # Generate a title from the first message (up to 40 chars)
+            title = message[:40].strip()
+            if len(message) > 40:
+                title += '...'
+            agent.session.title = title
+            agent.session.save(update_fields=['title'])
+            
         return Response(agent.chat(message))
 
     @action(detail=False, methods=['get'])
     def sessions(self, request):
         sessions = AgentSession.objects.filter(user=request.user).order_by('-started_at')
-        return Response(AgentSessionSerializer(sessions, many=True).data)
+        return Response(AgentSessionLightSerializer(sessions, many=True).data)
+        
+    @action(detail=True, methods=['get'])
+    def session_detail(self, request, pk=None):
+        session = get_object_or_404(AgentSession, id=pk, user=request.user)
+        return Response(AgentSessionSerializer(session).data)
 
 
 class ExamSimulationViewSet(viewsets.ModelViewSet):

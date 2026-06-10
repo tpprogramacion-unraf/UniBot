@@ -132,9 +132,15 @@ class AgentSessionSerializer(serializers.ModelSerializer):
     messages = AgentMessageSerializer(many=True, read_only=True)
     class Meta:
         model = AgentSession
-        fields = ('id', 'enrollment', 'started_at', 'ended_at', 'messages')
+        fields = ('id', 'enrollment', 'title', 'started_at', 'ended_at', 'messages')
         read_only_fields = ('id', 'started_at')
 
+
+class AgentSessionLightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AgentSession
+        fields = ('id', 'enrollment', 'title', 'started_at', 'ended_at')
+        read_only_fields = ('id', 'started_at')
 
 class ExamSimulationSerializer(serializers.ModelSerializer):
     subject_name = serializers.CharField(source='enrollment.subject.name', read_only=True)
