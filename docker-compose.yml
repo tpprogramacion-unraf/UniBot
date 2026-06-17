@@ -49,6 +49,7 @@ services:
       - VITE_API_URL=http://localhost/api
     volumes:
       - ./frontend:/app
+    command: sh -c "cd /app && npm install --prefer-offline --no-audit && npm run dev"
 
   nginx:
     image: nginx:alpine
