@@ -2,7 +2,7 @@
 
 Trabajo Práctico Final — Materia: Programación  
 Universidad Nacional de Rafaela (UNRAF)  
-**Autores:** Santiago Bortolan
+**Autor:** Santiago Bortolan
 
 ---
 
