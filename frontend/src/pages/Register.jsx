@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import '../premium.css';
 
 export default function Register() {
   const { register } = useAuth();
@@ -16,6 +17,19 @@ export default function Register() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Spotlight state
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,8 +54,24 @@ export default function Register() {
 
   return (
     <div className="auth-page">
+      {/* GLOBAL THEME BACKGROUND */}
       <div className="auth-bg" />
-      <div className="auth-card glass-dispersion">
+
+      {/* Background Floating Particles */}
+      <div className="auth-particles">
+        <div className="particle particle-1"></div>
+        <div className="particle particle-2"></div>
+        <div className="particle particle-3"></div>
+      </div>
+
+      <div 
+        ref={cardRef}
+        className="premium-glass-card"
+        onMouseMove={handleMouseMove}
+        style={{ '--mouse-x': `${mousePos.x}px`, '--mouse-y': `${mousePos.y}px` }}
+      >
+        <div className="card-spotlight"></div>
+
         <button type="button" className="auth-theme-btn" onClick={toggle}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>

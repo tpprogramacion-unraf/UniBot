@@ -1,19 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   redis:
     image: redis:7-alpine
     restart: unless-stopped
@@ -34,8 +19,6 @@ services:
       - ./backend:/code
       - media_data:/code/media
     depends_on:
-      db:
-        condition: service_healthy
       redis:
         condition: service_healthy
     command: >
@@ -53,8 +36,6 @@ services:
       - ./backend:/code
       - media_data:/code/media
     depends_on:
-      db:
-        condition: service_healthy
       redis:
         condition: service_healthy
     command: celery -A config worker --loglevel=info --concurrency=2
@@ -68,7 +49,6 @@ services:
       - VITE_API_URL=http://localhost/api
     volumes:
       - ./frontend:/app
-      - /app/node_modules
 
   nginx:
     image: nginx:alpine
@@ -83,6 +63,5 @@ services:
       - frontend
 
 volumes:
-  postgres_data:
   redis_data:
   media_data:

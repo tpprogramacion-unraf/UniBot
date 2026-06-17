@@ -145,7 +145,7 @@ export default function Calendar() {
             <button type="button" className={view === 'week' ? 'active' : ''} onClick={() => setView('week')}>SEMANA</button>
           </div>
           <button type="button" className="btn-primary" onClick={() => setShowForm(!showForm)}>
-            {showForm ? '[X] CANCEL' : '[+] EVENTO'}
+            {showForm ? 'CANCELAR' : 'EVENTO'}
           </button>
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function Calendar() {
           <div className="cal-nav">
             <button type="button" onClick={() => setCurrentDate(new Date(year, month - 1, 1))}>{'<<'}</button>
             <span>{MONTHS[month].toUpperCase()} {year}</span>
-            <button type="button" onClick={() => setCurrentDate(new Date(year, month + 1, 1))}>{'>'+'>'}</button>
+            <button type="button" onClick={() => setCurrentDate(new Date(year, month + 1, 1))}>{'>' + '>'}</button>
             <button type="button" className="btn-sm today-btn" onClick={() => { setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1)); setSelectedDay(today) }}>TODAY</button>
           </div>
 
@@ -290,9 +290,10 @@ export default function Calendar() {
         <div>
           <div className="cal-nav">
             <button type="button" onClick={() => { const d = new Date(selectedDay); d.setDate(d.getDate() - 7); setSelectedDay(d) }}>{'<<'}</button>
-            <span>{weekDays[0].getDate().toString().padStart(2,'0')}.{(weekDays[0].getMonth()+1).toString().padStart(2,'0')} → {weekDays[5].getDate().toString().padStart(2,'0')}.{(weekDays[5].getMonth()+1).toString().padStart(2,'0')}.{year}</span>
-            <button type="button" onClick={() => { const d = new Date(selectedDay); d.setDate(d.getDate() + 7); setSelectedDay(d) }}>{'>'+'>'}</button>
-            <button type="button" className="btn-sm today-btn" onClick={() => setSelectedDay(today)}>TODAY</button>
+            <span>{weekDays[0].getDate().toString().padStart(2, '0')}.{(weekDays[0].getMonth() + 1).toString().padStart(2, '0')} → {weekDays[5].getDate().toString().padStart(2, '0')}.{(weekDays[5].getMonth() + 1).toString().padStart(2, '0')}.{year}</span>
+            <button type="button" onClick={() => { const d = new Date(selectedDay); d.setDate(d.getDate() + 7); setSelectedDay(d) }}>{'>' + '>'}</button>
+            <button type="button" className="btn-sm today-btn" onClick={() => setSelectedDay(today)}>HOY
+            </button>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '52px repeat(6, 1fr)', border: '1px solid var(--border)', width: '100%', overflowX: 'auto' }}>
@@ -300,7 +301,7 @@ export default function Calendar() {
             {weekDays.map((day, di) => (
               <div key={di} style={{ height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, borderBottom: '1px solid var(--border)', borderRight: di < 5 ? '1px solid var(--border)' : 'none', background: isToday(day) ? 'rgba(255,42,42,0.05)' : 'var(--bg-2)' }}>
                 <span style={{ fontSize: '0.55rem', color: 'var(--text-3)', letterSpacing: '0.15em' }}>
-                  {['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'][day.getDay()]}
+                  {['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'][day.getDay()]}
                 </span>
                 <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '1rem', color: isToday(day) ? 'var(--accent)' : 'var(--text)', letterSpacing: '0.05em' }}>
                   {String(day.getDate()).padStart(2, '0')}

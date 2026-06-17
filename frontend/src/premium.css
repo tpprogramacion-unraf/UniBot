@@ -1,0 +1,136 @@
+/* premium.css */
+
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* El fondo ahora viene de .auth-bg en el JSX para mantener el tema global */
+}
+
+/* Trama sutil que le da al cristal algo para distorsionar */
+.auth-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: 1; /* Por encima del auth-bg, por debajo de la tarjeta */
+}
+
+[data-theme="dark"] .auth-page::after {
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+
+/* Glassmorphism Card - Liquid Glass Vibrancy */
+.premium-glass-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px; 
+  padding: 50px;
+  border-radius: 28px;
+  
+  /* Authentic Apple Liquid Glass (Vibrancy) */
+  background: rgba(255, 255, 255, 0.4);
+  /* Altísima saturación y blur para lograr el efecto esmerilado líquido */
+  backdrop-filter: blur(25px) saturate(220%) contrast(110%);
+  -webkit-backdrop-filter: blur(25px) saturate(220%) contrast(110%);
+  
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9); 
+  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .premium-glass-card {
+  background: rgba(30, 30, 35, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Textura de ruido típica de macOS para el esmerilado físico */
+.premium-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Efecto hover ligero para darle sensación 3D al cristal */
+.premium-glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+[data-theme="dark"] .premium-glass-card:hover {
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Spotlight Hover Effect */
+.card-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.15),
+    transparent 40%
+  );
+  z-index: 0;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.premium-glass-card:hover .card-spotlight {
+  opacity: 1;
+}
+
+[data-theme="dark"] .card-spotlight {
+  background: radial-gradient(
+    600px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.05),
+    transparent 40%
+  );
+}
+
+/* Textos adaptados para el cristal */
+.premium-glass-card h1 {
+  color: #1d1d1f;
+  font-weight: 700;
+}
+.premium-glass-card p {
+  color: #515154;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .premium-glass-card h1 {
+  color: #f5f5f7;
+}
+[data-theme="dark"] .premium-glass-card p {
+  color: #a1a1a6;
+}
+
+/* Make sure inner content stays above spotlight */
+.premium-glass-card > *:not(.card-spotlight) {
+  position: relative;
+  z-index: 1;
+}
