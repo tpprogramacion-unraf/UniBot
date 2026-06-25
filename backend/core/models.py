@@ -88,7 +88,6 @@ class Note(models.Model):
     class Meta:
         db_table = 'notes'
 
-
 class UploadedDocument(models.Model):
     STATUS_CHOICES = [('pending','Pendiente'),('processing','Procesando'),('indexed','Indexado'),('error','Error')]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

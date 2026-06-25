@@ -61,7 +61,7 @@ export default function Login() {
 
       <div 
         ref={cardRef}
-        className="premium-glass-card"
+        className="auth-glass-card"
         onMouseMove={handleMouseMove}
         style={{ '--mouse-x': `${mousePos.x}px`, '--mouse-y': `${mousePos.y}px` }}
       >

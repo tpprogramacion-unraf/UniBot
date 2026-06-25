@@ -1,17 +1,14 @@
-# frontend/Dockerfile
-FROM node:20-alpine
-
+# --- ETAPA 1: Compilación ---
+FROM node:20-alpine AS build
 WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# Copy entrypoint (instala deps frescos en cada inicio)
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# API URL config for production
-ENV VITE_API_URL=https://api.app10.academia.ar/api
-ENV VITE_BACKEND_URL=https://api.app10.academia.ar
-
-EXPOSE 5173
-
-# Entrypoint: npm install + npm run dev
-ENTRYPOINT ["/entrypoint.sh"]
+# --- ETAPA 2: Servidor de producción ---
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

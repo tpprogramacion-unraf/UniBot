@@ -11,7 +11,13 @@ export function AuthProvider({ children }) {
     if (token) {
       api.get('/auth/profile/')
         .then(r => setUser(r.data))
-        .catch(() => logout())
+        .catch(() => {
+          // Token inválido/expirado — limpiar sin hacer más API calls
+          localStorage.removeItem('access_token')
+          localStorage.removeItem('refresh_token')
+          setToken(null)
+          setUser(null)
+        })
     }
   }, [token])
 

@@ -99,6 +99,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://app10.academia.ar',
+    'https://api.app10.academia.ar',
+]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = '/static/'

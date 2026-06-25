@@ -1,68 +1,72 @@
 services:
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
+  # BASE DE DATOS: PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: app10-db
+    restart: always
+    env_file: .env
     volumes:
-      - redis_data:/data
+      - app10-db-data:/var/lib/postgresql/data
+    networks:
+      - nginx-proxy
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
+  # BACKEND: Django + Gunicorn
   backend:
     build: ./backend
-    restart: unless-stopped
+    container_name: app10-backend
+    restart: always
     env_file: .env
-    working_dir: /code
-    volumes:
-      - ./backend:/code
-      - media_data:/code/media
     depends_on:
-      redis:
+      db:
         condition: service_healthy
-    command: >
-      sh -c "python manage.py makemigrations core &&
-             python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60"
-
-  celery:
-    build: ./backend
-    restart: unless-stopped
-    env_file: .env
-    working_dir: /code
+    environment:
+      - VIRTUAL_HOST=api.app10.academia.ar
+      - VIRTUAL_PORT=8000
+      - LETSENCRYPT_HOST=api.app10.academia.ar
+      - LETSENCRYPT_EMAIL=admin@academia.ar
+      - DJANGO_ALLOWED_HOSTS=api.app10.academia.ar,localhost,127.0.0.1
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     volumes:
-      - ./backend:/code
       - media_data:/code/media
-    depends_on:
-      redis:
-        condition: service_healthy
-    command: celery -A config worker --loglevel=info --concurrency=2
+    networks:
+      - nginx-proxy
+    deploy:
+      resources:
+        limits:
+          memory: 384m
 
+  # FRONTEND: React compilado + Nginx
   frontend:
     build: ./frontend
-    restart: unless-stopped
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost/api
-    volumes:
-      - ./frontend:/app
-    command: sh -c "cd /app && npm install --prefer-offline --no-audit && npm run dev"
-
-  nginx:
-    image: nginx:alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - media_data:/code/media
+    container_name: app10-frontend
+    restart: always
     depends_on:
       - backend
-      - frontend
+    environment:
+      - VIRTUAL_HOST=app10.academia.ar
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=app10.academia.ar
+      - LETSENCRYPT_EMAIL=admin@academia.ar
+    networks:
+      - nginx-proxy
+    deploy:
+      resources:
+        limits:
+          memory: 128m
 
 volumes:
-  redis_data:
+  app10-db-data:
   media_data:
+
+networks:
+  nginx-proxy:
+    external: true

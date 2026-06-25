@@ -22,9 +22,10 @@ RUN set -ex && \
     rm -rf /root/.cache/
 COPY . /code
 
-ENV SECRET_KEY "2VF7ogF45EdXpjfAYhOnfC2oNn3ReUEwIn41q4GB7R39fSTgU7"
-RUN python manage.py collectstatic --noinput
+# SECRET_KEY temporal SOLO para collectstatic durante el build
+RUN SECRET_KEY=build-placeholder python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn","--bind",":8000","--workers","2","config.wsgi"]
+# Migra la DB y arranca Gunicorn
+CMD ["sh", "-c", "python manage.py migrate && gunicorn --bind :8000 --workers 2 config.wsgi"]
