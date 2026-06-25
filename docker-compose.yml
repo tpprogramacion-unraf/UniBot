@@ -22,6 +22,7 @@ services:
   # BACKEND: Django
   backend:
     build: ./backend
+    image: app10-backend-v2
     container_name: app10-backend
     restart: always
     depends_on:
@@ -43,6 +44,7 @@ services:
   # FRONTEND: React + Nginx
   frontend:
     build: ./frontend
+    image: app10-frontend-v2
     container_name: app10-frontend
     restart: always
     depends_on:
