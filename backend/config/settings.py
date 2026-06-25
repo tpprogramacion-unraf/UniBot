@@ -90,8 +90,11 @@ SIMPLE_JWT = {
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')
 GROQ_MODEL = os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile')
 
-CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://redis:6379/0')
+# Celery: solo si hay un Redis disponible
+_redis_url = os.getenv('REDIS_URL', '')
+if _redis_url:
+    CELERY_BROKER_URL = _redis_url
+    CELERY_RESULT_BACKEND = _redis_url
 
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL', '1') == '1'
 CORS_ALLOWED_ORIGINS = [
