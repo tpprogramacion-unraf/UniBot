@@ -24,7 +24,10 @@ services:
 
   # BACKEND: Django + Gunicorn
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      args:
+        - CACHEBUST=${CACHEBUST:-1}
     container_name: app10-backend
     restart: always
     depends_on:
@@ -55,7 +58,10 @@ services:
 
   # FRONTEND: React compilado + Nginx
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - CACHEBUST=${CACHEBUST:-1}
     container_name: app10-frontend
     restart: always
     depends_on:
