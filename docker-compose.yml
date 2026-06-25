@@ -1,54 +1,38 @@
+version: '3.8'
+
 services:
   # BASE DE DATOS: PostgreSQL
   db:
-    image: postgres:16-alpine
+    image: postgres:16
     container_name: app10-db
     restart: always
     environment:
-      - POSTGRES_DB=unibot
-      - POSTGRES_USER=unibot
-      - POSTGRES_PASSWORD=unibot1234
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - app10-db-data:/var/lib/postgresql/data
     networks:
       - nginx-proxy
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     deploy:
       resources:
         limits:
           memory: 256m
 
-  # BACKEND: Django + Gunicorn
+  # BACKEND: Django
   backend:
-    build:
-      context: ./backend
-      args:
-        - CACHEBUST=${CACHEBUST:-1}
+    build: ./backend
     container_name: app10-backend
     restart: always
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     environment:
       - VIRTUAL_HOST=api.app10.academia.ar
       - VIRTUAL_PORT=8000
       - LETSENCRYPT_HOST=api.app10.academia.ar
       - LETSENCRYPT_EMAIL=admin@academia.ar
       - DJANGO_ALLOWED_HOSTS=api.app10.academia.ar,localhost,127.0.0.1
-      - DATABASE_URL=postgres://unibot:unibot1234@db:5432/unibot
-      - POSTGRES_DB=unibot
-      - POSTGRES_USER=unibot
-      - POSTGRES_PASSWORD=unibot1234
-      - DB_HOST=db
-      - SECRET_KEY=unibot-production-s3cr3t-k3y-2026
-      - DEBUG=0
-      - CORS_ALLOW_ALL=0
-    volumes:
-      - media_data:/code/media
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     networks:
       - nginx-proxy
     deploy:
@@ -56,12 +40,9 @@ services:
         limits:
           memory: 384m
 
-  # FRONTEND: React compilado + Nginx
+  # FRONTEND: React + Nginx
   frontend:
-    build:
-      context: ./frontend
-      args:
-        - CACHEBUST=${CACHEBUST:-1}
+    build: ./frontend
     container_name: app10-frontend
     restart: always
     depends_on:
@@ -80,7 +61,6 @@ services:
 
 volumes:
   app10-db-data:
-  media_data:
 
 networks:
   nginx-proxy:

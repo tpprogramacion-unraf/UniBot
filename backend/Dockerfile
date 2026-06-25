@@ -21,8 +21,6 @@ RUN set -ex && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
 
-# Invalidar cache para siempre copiar código fresco
-ARG CACHEBUST=1
 COPY . /code
 
 # SECRET_KEY temporal SOLO para collectstatic durante el build
