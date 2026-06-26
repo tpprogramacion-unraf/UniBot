@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gradBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1c1e" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <linearGradient id="gradU" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5AC8FA" />
+      <stop offset="50%" stop-color="#0A84FF" />
+      <stop offset="100%" stop-color="#BF5AF2" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background with subtle border -->
+  <rect width="512" height="512" rx="120" fill="url(#gradBg)" />
+  <rect width="512" height="512" rx="120" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="12" />
+
+  <!-- U shape -->
+  <path d="M160 180 v 80 c 0 55, 45 96, 96 96 c 51 0, 96 -41, 96 -96 v -80" 
+        fill="none" 
+        stroke="url(#gradU)" 
+        stroke-width="52" 
+        stroke-linecap="round" 
+        filter="url(#glow)" />
+  
+  <!-- Spark / Star (AI representation) -->
+  <path d="M 256 60 L 270 100 L 310 114 L 270 128 L 256 168 L 242 128 L 202 114 L 242 100 Z" 
+        fill="#FFD60A" 
+        filter="url(#glow)"/>
+</svg>
