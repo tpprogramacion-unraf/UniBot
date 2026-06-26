@@ -27,6 +27,7 @@ services:
     restart: always
     depends_on:
       - db
+    env_file: .env
     environment:
       - VIRTUAL_HOST=api.app10.academia.ar
       - VIRTUAL_PORT=8000
